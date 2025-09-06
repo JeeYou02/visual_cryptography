@@ -12,13 +12,23 @@ from tools.VC_conversion import VC_conversion_diagonal
 from tools.VC_conversion import VC_conversion_vertical
 from tools.VC_conversion import VC_conversion_horizontal
 from tools.VC_conversion import VC_conversion_greyscale_4levels
+from tools.superimpose import superimpose
+
+def preview_quantization(mode, img):
+    if img is None:
+        return None
+    img = np.array(img)
+    if mode == "Greyscale":
+        grey_image = rgb_to_greyscale(img)
+        quantized_image = quantize_and_dither(grey_image)
+        return Image.fromarray(quantized_image)
+    else:
+        binary_image = rgb_to_binary(img)
+        return Image.fromarray(binary_image)
 
 def encrypt(image, mode, key_option, key_image=None):
     if image is None:
         return None, None, "❌ Please provide an input image."
-    
-    #if mode == "Binary" and filling is None:
-    #    return None, None, "❌ Please choose a filling option for binary mode."
 
     if key_option == "Provide Key":
         if key_image is None:
@@ -29,15 +39,13 @@ def encrypt(image, mode, key_option, key_image=None):
     img = np.array(image)
 
     if mode == "Greyscale":
-        grey_image = rgb_to_greyscale(img)
-        quantized_image = quantize_and_dither(grey_image)
 
         if key_option == "Generate Random":
-            key = key_gen_greyscale(quantized_image)
+            key = key_gen_greyscale(img)
         else:
             key = np.array(key_image)
 
-        cypher = encrypt_4levels(quantized_image, key)
+        cypher = encrypt_4levels(img, key)
 
         cypher = Image.fromarray(cypher)
         key = Image.fromarray(key)
@@ -74,6 +82,16 @@ def vc_convert(mode, filling, img):
         vc_img = Image.fromarray(vc_img)
         return vc_img, "✅ VC Conversion successful!"
 
+def superimpose_images(img1, img2):
+    if img1 is None or img2 is None:
+        return None, "❌ Please provide both share images."
+    if img1.size != img2.size:
+        return None, "❌ The two share images must be the same size."
+    img1_np = np.array(img1)
+    img2_np = np.array(img2)
+    result = superimpose(img1_np, img2_np)
+    return Image.fromarray(result), "✅ Superimposition successful!"
+
 bin_hor_img = "images/bin_hor_scheme.png"
 bin_ver_img = "images/bin_ver_scheme.png"
 bin_diag_img = "images/bin_diag_scheme.png"
@@ -108,11 +126,15 @@ with gr.Blocks() as demo:
             label="Select the type of quantization you wish to apply to your input image",
             info="Binary: 1-bit images (optimal for texts or black and white logos). Greyscale: 4-level greyscale images (optimal for detailed images)."
         )
+        with gr.Row():
+            with gr.Column():
+                input_img = gr.Image(type="pil", label="Upload Input Image")
+            with gr.Column():
+                preview_img = gr.Image(type="pil", format="png", interactive=False, label="Quantization Preview")
 
-        # --- Input image ---
-        input_img = gr.Image(type="pil", label="Upload Input Image")
+        input_img.change(preview_quantization, [mode, input_img], preview_img)
+        mode.change(preview_quantization, [mode, input_img], preview_img)
 
-        # --- Key selection ---
         key_option = gr.Radio(
             ["Provide Key", "Generate Random"], 
             label="Key Option"
@@ -124,7 +146,6 @@ with gr.Blocks() as demo:
 
         key_option.change(toggle_key, key_option, key_img)
 
-        # --- Run button + Output ---
         run_btn = gr.Button("🔒 Encrypt")
 
         cypher = gr.Image(type="pil", format="png", label="Cypher / Share 1")
@@ -133,7 +154,7 @@ with gr.Blocks() as demo:
 
         run_btn.click(
             encrypt,
-            inputs=[input_img, mode, key_option, key_img],
+            inputs=[preview_img, mode, key_option, key_img],
             outputs=[cypher, key, status]
         )
 
@@ -181,6 +202,25 @@ with gr.Blocks() as demo:
             vc_convert,
             inputs=[mode, filling, input_img],
             outputs=[output_img, status]
+        )
+        
+    with gr.Tab("Superimpose"):
+        gr.Markdown("This tool allows the superimposition of two shares to reveal the hidden image.")
+        
+        with gr.Row():
+            with gr.Column():
+                input_img1 = gr.Image(type="pil", image_mode="RGBA", label="Upload Share 1")
+            with gr.Column():
+                input_img2 = gr.Image(type="pil", image_mode="RGBA", label="Upload Share 2")
+
+        superimpose_btn = gr.Button("🖼️ Superimpose Shares")
+        superimposed_img = gr.Image(type="pil", format="png", label="Superimposed Image")
+        status = gr.Label(label="Status")
+
+        superimpose_btn.click(
+            superimpose_images,
+            inputs=[input_img1, input_img2],
+            outputs=[superimposed_img, status]
         )
 
 
