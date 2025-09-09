@@ -19,19 +19,14 @@ def VC_conversion_diagonal(img):
     for i in range(img.shape[0]):
         for j in range(img.shape[1]):
             img_px_val = img[i][j][0]
-            neg_img_px_val = 255 - img_px_val
 
-            VC_img[i*2][j*2] = img_px_val
-            VC_img[i*2][j*2][3] = 255 - VC_img[i*2][j*2][3]
+            VC_img[i*2][j*2][3] = 255 - img_px_val
             
-            VC_img[i*2][j*2 + 1] = neg_img_px_val
-            VC_img[i*2][j*2 + 1][3] = 255 - VC_img[i*2][j*2 + 1][3]
+            VC_img[i*2][j*2 + 1][3] = img_px_val
 
-            VC_img[i*2 + 1][j*2] = neg_img_px_val
-            VC_img[i*2 + 1][j*2][3] = 255 - VC_img[i*2 + 1][j*2][3]
+            VC_img[i*2 + 1][j*2][3] = img_px_val
 
-            VC_img[i*2 + 1][j*2 + 1] = img_px_val
-            VC_img[i*2 + 1][j*2 + 1][3] = 255 - VC_img[i*2 + 1][j*2 + 1][3]
+            VC_img[i*2 + 1][j*2 + 1][3] = 255 - img_px_val
     return VC_img
 
 def VC_conversion_vertical(img):
@@ -40,19 +35,14 @@ def VC_conversion_vertical(img):
     for i in range(img.shape[0]):
         for j in range(img.shape[1]):
             img_px_val = img[i][j][0]
-            neg_img_px_val = 255 - img_px_val
 
-            VC_img[i*2][j*2] = img_px_val
-            VC_img[i*2][j*2][3] = 255 - VC_img[i*2][j*2][3]
+            VC_img[i*2][j*2][3] = 255 - img_px_val
             
-            VC_img[i*2][j*2 + 1] = neg_img_px_val
-            VC_img[i*2][j*2 + 1][3] = 255 - VC_img[i*2][j*2 + 1][3]
+            VC_img[i*2][j*2 + 1][3] = img_px_val
 
-            VC_img[i*2 + 1][j*2] = img_px_val
-            VC_img[i*2 + 1][j*2][3] = 255 - VC_img[i*2 + 1][j*2][3]
+            VC_img[i*2 + 1][j*2][3] = 255 - img_px_val
 
-            VC_img[i*2 + 1][j*2 + 1] = neg_img_px_val
-            VC_img[i*2 + 1][j*2 + 1][3] = 255 - VC_img[i*2 + 1][j*2 + 1][3]
+            VC_img[i*2 + 1][j*2 + 1][3] = img_px_val
     return VC_img
 
 def VC_conversion_horizontal(img):
@@ -61,19 +51,14 @@ def VC_conversion_horizontal(img):
     for i in range(img.shape[0]):
         for j in range(img.shape[1]):
             img_px_val = img[i][j][0]
-            neg_img_px_val = 255 - img_px_val
 
-            VC_img[i*2][j*2] = img_px_val
-            VC_img[i*2][j*2][3] = 255 - VC_img[i*2][j*2][3]
+            VC_img[i*2][j*2][3] = 255 - img_px_val
             
-            VC_img[i*2][j*2 + 1] = img_px_val
-            VC_img[i*2][j*2 + 1][3] = 255 - VC_img[i*2][j*2 + 1][3]
+            VC_img[i*2][j*2 + 1][3] = 255 - img_px_val
 
-            VC_img[i*2 + 1][j*2] = neg_img_px_val
-            VC_img[i*2 + 1][j*2][3] = 255 - VC_img[i*2 + 1][j*2][3]
+            VC_img[i*2 + 1][j*2][3] = img_px_val
 
-            VC_img[i*2 + 1][j*2 + 1] = neg_img_px_val
-            VC_img[i*2 + 1][j*2 + 1][3] = 255 - VC_img[i*2 + 1][j*2 + 1][3]
+            VC_img[i*2 + 1][j*2 + 1][3] = img_px_val
     return VC_img
 
 def VC_conversion_greyscale_4levels(img):
