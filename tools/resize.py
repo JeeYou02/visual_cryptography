@@ -1,7 +1,7 @@
 import cv2
 
-img = cv2.imread('Logo_UniCT.png')
+img = cv2.imread('baboon.png')
 
-small_img = cv2.resize(img,(1000,493))
+small_img = cv2.resize(img,(128,128))
 
-cv2.imwrite('image.jpg', small_img)
+cv2.imwrite('baboon_128.jpg', small_img)

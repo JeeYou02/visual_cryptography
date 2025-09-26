@@ -3,6 +3,8 @@ import sys
 import cv2
 
 def encrypt(n,m):   #n,m are gray levels in {1,2,3,4}
+    assert n >= 1 and n <= 4 and m >= 1 and m <= 4, "Bad values m = " + str(m) + ", n = " + str(n)
+
     if(n == 4):
         return m
     if(m == 4):
@@ -23,7 +25,7 @@ def encrypt_4levels(img, key):
             key_val = key[i][j][0]
             img_val = img[i][j][0]
 
-            cypher[i][j] = encrypt((key_val+1)/64, (img_val+1)/64)*64 - 1
+            cypher[i][j] = encrypt((int(key_val)+1)//64, (int(img_val)+1)//64)*64 - 1
     
     return cypher
 

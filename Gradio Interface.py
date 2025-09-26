@@ -159,8 +159,8 @@ with gr.Blocks() as demo:
         )
 
     with gr.Tab("VC Conversion"):
-        gr.Markdown("This tool allows the conversion of shares generated with the encryption" \
-                    "algorithm into transparent overlaiable images, as shown in the scheme below.")
+        gr.Markdown("This tool allows the conversion of shares generated with the encryption " \
+                    "algorithm into transparent overlayable images, as shown in the scheme below.")
 
         with gr.Row():
             with gr.Column():
