@@ -67,7 +67,7 @@ def VC_conversion_greyscale_4levels(img):
     for i in range(img.shape[0]):
         for j in range(img.shape[1]):
             px_val = img[i][j][0]
-            index = (px_val + 1)//64 - 1
+            index = (int(px_val) + 1)//64 - 1
             for k in range(9):
                 row = math.floor(k/3)
                 column = k % 3
